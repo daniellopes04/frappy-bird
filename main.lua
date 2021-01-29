@@ -21,8 +21,17 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
-local background = love.graphics.newImage("sprites/background.png")
-local ground = love.graphics.newImage("sprites/ground.png")
+local background = love.graphics.newImage("sprites/background-day.png")
+local backgroundScroll = 0
+
+local ground = love.graphics.newImage("sprites/ground-day.png")
+local groundScroll = 0
+
+local BACKGROUND_SCROLL_SPEED = 30
+local GROUND_SCROLL_SPEED = 60
+
+local BACKGROUND_LOOPING_POINT = 514
+
 
 -- Runs when the game starts, only once.
 function love.load()
@@ -50,15 +59,16 @@ end
 
 --Called each frame, updates the game state components.
 function love.update(dt)
-
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
 end
 
 -- Called each frame for drawing to the screen after the update or otherwise.
 function love.draw()
     push:start()
 
-    love.graphics.draw(background, 0, 0)
-    love.graphics.draw(ground, 0, VIRTUAL_HEIGHT - 16)
+    love.graphics.draw(background, -backgroundScroll, 0)
+    love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
 
     push:finish()
 end

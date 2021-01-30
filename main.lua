@@ -60,6 +60,9 @@ local spawnLimit = math.random(1, 2) + math.random() + 0.5
 -- Last recorded y value
 local lastY = -PIPE_HEIGHT + math.random(80) + 20
 
+-- Scrolling variable to pause the game when collision with pipe occurs
+local scrolling = true
+
 -- Runs when the game starts, only once
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -106,40 +109,54 @@ end
 
 --Called each frame, updates the game state components
 function love.update(dt)
-    -- Scrolling the background and ground sprites
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+    if scrolling then
+        -- Scrolling the background and ground sprites
+        backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
 
-    -- Spawn a pipe every spawnLimit seconds on the edge of screen
-    spawnTimer = spawnTimer + dt
+        -- Spawn a pipe every spawnLimit seconds on the edge of screen
+        spawnTimer = spawnTimer + dt
 
-    if spawnTimer > spawnLimit then
-        -- Modify y so the pipes aren't too far apart
-        -- Pipe spawns no higher than 10 pixels below top edge of screen
-        -- And no lower than the gap length
-        local y = math.max(-PIPE_HEIGHT + 10,
-            math.min(lastY + math.random(-40, 40), VIRTUAL_HEIGHT - GAP_HEIGHT - PIPE_HEIGHT - 26))
-        lastY = y
+        if spawnTimer > spawnLimit then
+            -- Modify y so the pipes aren't too far apart
+            -- Pipe spawns no higher than 10 pixels below top edge of screen
+            -- And no lower than the gap length
+            local y = math.max(-PIPE_HEIGHT + 10,
+                math.min(lastY + math.random(-40, 40), VIRTUAL_HEIGHT - GAP_HEIGHT - PIPE_HEIGHT - 26))
+            lastY = y
 
-        table.insert(pipePairs, PipePair(y))
-        spawnTimer = 0
-        spawnLimit = math.random(1, 2) + math.random() + 0.5
-    end
+            table.insert(pipePairs, PipePair(y))
+            spawnTimer = 0
+            spawnLimit = math.random(1, 2) + math.random() + 0.5
+        end
 
-    -- Moves the bird and flaps its wings
-    bird:update(dt)
+        -- Moves the bird and flaps its wings
+        bird:update(dt)
 
-    -- Moves pipes through the screen 
-    for k, pair in pairs(pipePairs) do
-        pair:update(dt)
-    end
+        -- Moves pipes through the screen 
+        for k, pair in pairs(pipePairs) do
+            pair:update(dt)
 
-    -- Remove the flaggd pipes
-    -- Since the removal of a table element shifts all the other elements
-    -- This is done on a separate for so it doesn't interfere on other iterations
-    for k, pair in pairs(pipePairs) do
-        if pair.remove then
-            table.remove(pipePairs, k)
+            -- Check to see if bird collided with pipe
+            for l, pipe in pairs(pair.pipes) do
+                if bird:collides(pipe) then
+                    -- Pause the game
+                    scrolling = false
+                end
+            end
+
+            if pair.x < -PIPE_WIDTH then
+                pair.remove = true
+            end
+        end
+
+        -- Remove the flaggd pipes
+        -- Since the removal of a table element shifts all the other elements
+        -- This is done on a separate for so it doesn't interfere on other iterations
+        for k, pair in pairs(pipePairs) do
+            if pair.remove then
+                table.remove(pipePairs, k)
+            end
         end
     end
 

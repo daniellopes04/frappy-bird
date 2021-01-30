@@ -9,8 +9,11 @@
 
 PipePair = Class{}
 
+-- Gap height between pipes
+GAP_HEIGHT = 90
+
 function PipePair:init(y)
-    self.x = VIRTUAL_WIDTH + 32
+    self.x = VIRTUAL_WIDTH
     self.y = y
  
     -- Initializes pipe pair

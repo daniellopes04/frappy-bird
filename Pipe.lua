@@ -23,7 +23,9 @@ function Pipe:init(orientation, y)
     self.x = VIRTUAL_WIDTH
     self.y = y
 
-    self.width = PIPE_IMAGE:getWidth()
+    -- self.width = PIPE_IMAGE:getWidth()
+    self.width = PIPE_WIDTH
+    -- self.height = PIPE_IMAGE:getHeight()
     self.height = PIPE_HEIGHT
 
     self.orientation = orientation

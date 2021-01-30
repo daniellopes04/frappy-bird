@@ -28,9 +28,6 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
--- Gap height between pipes
-GAP_HEIGHT = 90
-
 -- Gets the current hour, to update the sprites
 CURRENT_HOUR = tonumber(os.date("%H"))
 
@@ -56,8 +53,9 @@ math.randomseed(os.time())
 local bird = Bird()
 local pipePairs = {}
 
--- Keeps track of the elapsed time since last pipe spawn
+-- Elapsed time since last spawn and limit to next spawn
 local spawnTimer = 0
+local spawnLimit = math.random(1, 3) + math.random()
 
 -- Last recorded y value
 local lastY = -PIPE_HEIGHT + math.random(80) + 20
@@ -112,19 +110,20 @@ function love.update(dt)
     backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
 
-    -- Spawn a pipe every 2 seconds on the edge of screen
+    -- Spawn a pipe every spawnLimit seconds on the edge of screen
     spawnTimer = spawnTimer + dt
 
-    if spawnTimer > 2 then
+    if spawnTimer > spawnLimit then
         -- Modify y so the pipes aren't too far apart
         -- Pipe spawns no higher than 10 pixels below top edge of screen
         -- And no lower than the gap length
         local y = math.max(-PIPE_HEIGHT + 10,
-            math.min(lastY + math.random(-20, 20), VIRTUAL_HEIGHT - GAP_HEIGHT - PIPE_HEIGHT))
+            math.min(lastY + math.random(-40, 40), VIRTUAL_HEIGHT - GAP_HEIGHT - PIPE_HEIGHT - 26))
         lastY = y
 
         table.insert(pipePairs, PipePair(y))
         spawnTimer = 0
+        spawnLimit = math.random(1, 3) + math.random()
     end
 
     -- Moves the bird and flaps its wings

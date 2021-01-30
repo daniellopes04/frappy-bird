@@ -19,6 +19,10 @@ Class = require "class"
 require "Bird"
 require "Pipe"
 require "PipePair"
+require "StateMachine"
+require "states/BaseState"
+require "states/PlayState"
+require "states/TitleScreenState"
 
 -- Physical screen dimensions
 WINDOW_WIDTH = 1280
@@ -49,24 +53,17 @@ local BACKGROUND_LOOPING_POINT = 514
 -- Seed the random number generator function
 math.randomseed(os.time())
 
--- Bird sprite and pipes sprite list
-local bird = Bird()
-local pipePairs = {}
-
--- Elapsed time since last spawn and limit to next spawn
-local spawnTimer = 0
-local spawnLimit = math.random(1, 2) + math.random() + 0.5
-
--- Last recorded y value
-local lastY = -PIPE_HEIGHT + math.random(80) + 20
-
--- Scrolling variable to pause the game when collision with pipe occurs
-local scrolling = true
-
 -- Runs when the game starts, only once
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.window.setTitle("Frappy Bird")
+
+    -- Loads the fonts used in the game
+    smallFont = love.graphics.newFont("fonts/font.ttf", 8)
+    mediumFont = love.graphics.newFont("fonts/flappy.ttf", 14)
+    flappyFont = love.graphics.newFont("fonts/flappy.ttf", 28)
+    hugeFont = love.graphics.newFont("fonts/flappy.ttf", 56)
+    love.graphics.setFont(flappyFont)
 
     -- Changes the background and ground sprites based on hour of day
     if CURRENT_HOUR >= 18 or (CURRENT_HOUR >= 0 and CURRENT_HOUR <= 6) then
@@ -82,6 +79,17 @@ function love.load()
         fullscreen = false,
         resizable = true
     })
+
+    -- Initialize state machine with all state-returning functions
+    gStateMachine = StateMachine {
+        ["title"] = function() 
+            return TitleScreenState() 
+        end,
+        ["play"] = function() 
+            return PlayState() 
+        end
+    }
+    gStateMachine:change("title")
 
     -- Keeps track of the keys pressed by the user
     love.keyboard.keysPressed = {}
@@ -109,56 +117,11 @@ end
 
 --Called each frame, updates the game state components
 function love.update(dt)
-    if scrolling then
-        -- Scrolling the background and ground sprites
-        backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
-        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+    -- Scrolling the background and ground sprites
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
 
-        -- Spawn a pipe every spawnLimit seconds on the edge of screen
-        spawnTimer = spawnTimer + dt
-
-        if spawnTimer > spawnLimit then
-            -- Modify y so the pipes aren't too far apart
-            -- Pipe spawns no higher than 10 pixels below top edge of screen
-            -- And no lower than the gap length
-            local y = math.max(-PIPE_HEIGHT + 10,
-                math.min(lastY + math.random(-40, 40), VIRTUAL_HEIGHT - GAP_HEIGHT - PIPE_HEIGHT - 26))
-            lastY = y
-
-            table.insert(pipePairs, PipePair(y))
-            spawnTimer = 0
-            spawnLimit = math.random(1, 2) + math.random() + 0.5
-        end
-
-        -- Moves the bird and flaps its wings
-        bird:update(dt)
-
-        -- Moves pipes through the screen 
-        for k, pair in pairs(pipePairs) do
-            pair:update(dt)
-
-            -- Check to see if bird collided with pipe
-            for l, pipe in pairs(pair.pipes) do
-                if bird:collides(pipe) then
-                    -- Pause the game
-                    scrolling = false
-                end
-            end
-
-            if pair.x < -PIPE_WIDTH then
-                pair.remove = true
-            end
-        end
-
-        -- Remove the flaggd pipes
-        -- Since the removal of a table element shifts all the other elements
-        -- This is done on a separate for so it doesn't interfere on other iterations
-        for k, pair in pairs(pipePairs) do
-            if pair.remove then
-                table.remove(pipePairs, k)
-            end
-        end
-    end
+    gStateMachine:update(dt)
 
     -- Resets input table, so it stores only the keys pressed at one frame
     love.keyboard.keysPressed = {}
@@ -168,19 +131,10 @@ end
 function love.draw()
     push:start()
 
-    -- Rendering background
+    -- Rendering background, all the items referring to current state and ground
     love.graphics.draw(background, -backgroundScroll, 0)
-
-    -- Rendering all the pipes
-    for k, pair in pairs(pipePairs) do
-        pair:render()
-    end
-
-    -- Rendering ground after the pipes, so the pipes appear to be sticking out of it
+    gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
-
-    -- Rendering the bird
-    bird:render()
 
     push:finish()
 end

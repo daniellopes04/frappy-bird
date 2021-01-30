@@ -12,13 +12,6 @@ Pipe = Class{}
 -- Loads pipe sprite
 local PIPE_IMAGE = love.graphics.newImage("sprites/pipe-green.png")
 
--- Pipe sprite dimensions
-PIPE_WIDTH = 52
-PIPE_HEIGHT = 320
-
--- Pipe scroll speed
-PIPE_SPEED = 60
-
 function Pipe:init(orientation, y)
     self.x = VIRTUAL_WIDTH
     self.y = y

@@ -37,8 +37,8 @@ function Bird:init()
     -- Bird image is set to the respective sprite
     self.image = love.graphics.newImage("sprites/".. self.color .."bird-midflap.png")
 
-    self.width = self.image:getWidth()
-    self.height = self.image:getHeight()
+    self.width = BIRD_WIDTH
+    self.height = BIRD_HEIGHT
     self.x = VIRTUAL_WIDTH / 2 - (self.width / 2)
     self.y = VIRTUAL_HEIGHT / 2 - (self.height / 2)
 
@@ -75,13 +75,15 @@ function Bird:update(dt)
         self.image = love.graphics.newImage("sprites/".. self.color .. "bird-downflap.png")
     end
 
-    -- Updates bird position to make it fall on the screen
-    self.dy = self.dy + GRAVITY * dt
-    self.y = self.y + self.dy
+    if birdMovement == true then
+        -- Updates bird position to make it fall on the screen
+        self.dy = self.dy + GRAVITY * dt
+        self.y = self.y + self.dy
 
-    -- The bird jumps on screen when "space" gets pressed
-    if love.keyboard.wasPressed("space") then
-        self.dy = ANTI_GRAVITY
+        -- The bird jumps on screen when "space" gets pressed
+        if love.keyboard.wasPressed("space") then
+            self.dy = ANTI_GRAVITY
+        end
     end
 end
 

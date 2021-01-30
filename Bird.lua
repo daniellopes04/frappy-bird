@@ -9,7 +9,14 @@
 
 Bird = Class{}
 
-start = love.timer.getTime()
+-- Gravity constant, used to simulate g
+local GRAVITY = 20
+
+-- Acceleration upwards that makes the bird jump onscreen
+local ANTI_GRAVITY = -5
+
+-- Used to update the bird's wings
+local elapsedTime = 0
 
 function Bird:init()
     math.randomseed(os.time())
@@ -35,14 +42,16 @@ function Bird:init()
     self.height = self.image:getHeight()
     self.x = VIRTUAL_WIDTH / 2 - (self.width / 2)
     self.y = VIRTUAL_HEIGHT / 2 - (self.height / 2)
+
+    self.dy = 0
 end
 
 function Bird:update(dt)
     -- Updates the bird's wing movement every 0.2 seconds
-    elapsedTime = love.timer.getTime() - start
+    elapsedTime = elapsedTime + dt
     if elapsedTime > 0.2 then
         self.flap = (self.flap + 1) % 3
-        start = love.timer.getTime()
+        elapsedTime = 0
     end
 
     -- Updates the bird sprite
@@ -52,6 +61,15 @@ function Bird:update(dt)
         self.image = love.graphics.newImage("sprites/".. self.color .. "bird-upflap.png")
     elseif self.flap == 2 then
         self.image = love.graphics.newImage("sprites/".. self.color .. "bird-downflap.png")
+    end
+
+    -- Updates bird position to make it fall on the screen
+    self.dy = self.dy + GRAVITY * dt
+    self.y = self.y + self.dy
+
+    -- The bird jumps on screen when "space" gets pressed
+    if love.keyboard.wasPressed("space") then
+        self.dy = ANTI_GRAVITY
     end
 end
 

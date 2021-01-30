@@ -61,6 +61,9 @@ function love.load()
         fullscreen = false,
         resizable = true
     })
+
+    -- Keeps track of the keys pressed by the user
+    love.keyboard.keysPressed = {}
 end
 
 -- Called by love2d whenever we resize the screen
@@ -70,9 +73,17 @@ end
 
 -- Keyboard entry handler, called each frame
 function love.keypressed(key)
+    -- When the user presses a key, it gets stored in the table
+    love.keyboard.keysPressed[key] = true
+
     if key == "escape" then
         love.event.quit()
     end
+end
+
+-- Used to check if a key was pressed in the last frame
+function love.keyboard.wasPressed(key)
+    return love.keyboard.keysPressed[key]
 end
 
 --Called each frame, updates the game state components
@@ -82,7 +93,10 @@ function love.update(dt)
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
 
     -- Moves the bird and flaps its wings
-    bird:update()
+    bird:update(dt)
+
+    -- Resets the table, so it stores only the keys pressed at one frame
+    love.keyboard.keysPressed = {}
 end
 
 -- Called each frame for drawing to the screen after the update or otherwise

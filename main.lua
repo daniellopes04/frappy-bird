@@ -55,7 +55,7 @@ local pipePairs = {}
 
 -- Elapsed time since last spawn and limit to next spawn
 local spawnTimer = 0
-local spawnLimit = math.random(1, 3) + math.random()
+local spawnLimit = math.random(1, 2) + math.random() + 0.5
 
 -- Last recorded y value
 local lastY = -PIPE_HEIGHT + math.random(80) + 20
@@ -123,7 +123,7 @@ function love.update(dt)
 
         table.insert(pipePairs, PipePair(y))
         spawnTimer = 0
-        spawnLimit = math.random(1, 3) + math.random()
+        spawnLimit = math.random(1, 2) + math.random() + 0.5
     end
 
     -- Moves the bird and flaps its wings

@@ -18,11 +18,19 @@ Class = require "class"
 -- Bird class
 require "Bird"
 
--- Screen's real and virtual dimensions
+-- Pipe class
+require "Pipe"
+
+-- Physical screen dimensions
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
+
+-- Virtual screen dimensions
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
+
+-- Gets the current hour, to update the sprites
+CURRENT_HOUR = tonumber(os.date("%H"))
 
 -- Loads background sprite and sets its scroll value
 local background = love.graphics.newImage("sprites/background-day.png")
@@ -39,7 +47,15 @@ local GROUND_SCROLL_SPEED = 60
 -- Defines a looping point based on repetition of the texture chosen
 local BACKGROUND_LOOPING_POINT = 514
 
+-- Seed the random number generator function
+math.randomseed(os.time())
+
+-- Bird sprite and pipes sprite list
 local bird = Bird()
+local pipes = {}
+
+-- Keeps track of the elapsed time since last pipe spawn
+local spawnTimer = 0
 
 -- Runs when the game starts, only once
 function love.load()
@@ -47,11 +63,10 @@ function love.load()
     love.window.setTitle("Frappy Bird")
 
     -- Changes the background and ground sprites based on hour of day
-    currentHour = tonumber(os.date("%H"))
-    if currentHour >= 18 or (currentHour >= 0 and currentHour <= 6) then
+    if CURRENT_HOUR >= 18 or (CURRENT_HOUR >= 0 and CURRENT_HOUR <= 6) then
         background = love.graphics.newImage("sprites/background-night.png")
         ground = love.graphics.newImage("sprites/ground-night.png")
-    elseif currentHour == 17 or currentHour == 18 then
+    elseif CURRENT_HOUR == 17 or CURRENT_HOUR == 18 then
         background = love.graphics.newImage("sprites/background-sunset.png")
     end
 
@@ -92,10 +107,27 @@ function love.update(dt)
     backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
 
+    -- Spawn a pipe every 2 seconds on the edge of screen
+    spawnTimer = spawnTimer + dt
+
+    if spawnTimer > 2 then
+        table.insert(pipes, Pipe())
+        spawnTimer = 0
+    end
+
     -- Moves the bird and flaps its wings
     bird:update(dt)
 
-    -- Resets the table, so it stores only the keys pressed at one frame
+    -- Moves pipes through the screen 
+    for k, pipe in pairs(pipes) do
+        pipe:update(dt)
+
+        if pipe.x < -pipe.width then
+            table.remove(pipes, k)
+        end
+    end
+
+    -- Resets input table, so it stores only the keys pressed at one frame
     love.keyboard.keysPressed = {}
 end
 
@@ -103,8 +135,15 @@ end
 function love.draw()
     push:start()
 
-    -- Rendering background and foreground
+    -- Rendering background
     love.graphics.draw(background, -backgroundScroll, 0)
+
+    -- Rendering all the pipes
+    for k, pipe in pairs(pipes) do
+        pipe:render()
+    end
+
+    -- Rendering ground after the pipes, so the pipes appear to be sticking out of it
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
 
     -- Rendering the bird

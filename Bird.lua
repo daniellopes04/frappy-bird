@@ -15,14 +15,13 @@ local GRAVITY = 20
 -- Acceleration upwards that makes the bird jump onscreen
 local ANTI_GRAVITY = -5
 
--- Used to update the bird's wings
-local elapsedTime = 0
+-- Used to update the bird's sprite to move its wings
+local birdTimer = 0
 
 function Bird:init()
-    math.randomseed(os.time())
+    -- Bird color is defined randomly
     num = math.random(1, 3)
 
-    -- Bird color is defined randomly
     if num == 1 then
         self.color = "yellow"
     elseif num == 2 then
@@ -48,10 +47,11 @@ end
 
 function Bird:update(dt)
     -- Updates the bird's wing movement every 0.2 seconds
-    elapsedTime = elapsedTime + dt
-    if elapsedTime > 0.2 then
+    birdTimer = birdTimer + dt
+    
+    if birdTimer > 0.2 then
         self.flap = (self.flap + 1) % 3
-        elapsedTime = 0
+        birdTimer = 0
     end
 
     -- Updates the bird sprite

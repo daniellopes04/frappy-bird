@@ -30,6 +30,8 @@ local groundScroll = 0
 local BACKGROUND_SCROLL_SPEED = 30
 local GROUND_SCROLL_SPEED = 60
 
+-- Original background looping point used in the lecture.
+-- local BACKGROUND_LOOPING_POINT = 413
 local BACKGROUND_LOOPING_POINT = 514
 
 
@@ -37,6 +39,15 @@ local BACKGROUND_LOOPING_POINT = 514
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.window.setTitle("Frappy Bird")
+
+    -- Changes the sprites based on hour of day.
+    currentHour = tonumber(os.date("%H"))
+    if currentHour >= 18 or (currentHour >= 0 and currentHour <= 6) then
+        background = love.graphics.newImage("sprites/background-night.png")
+        ground = love.graphics.newImage("sprites/ground-night.png")
+    elseif currentHour == 17 or currentHour == 18 then
+        background = love.graphics.newImage("sprites/background-sunset.png")
+    end
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         vsync = true,

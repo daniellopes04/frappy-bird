@@ -15,11 +15,10 @@ push = require "push"
 -- https://github.com/vrld/hump/blob/master/class.lua
 Class = require "class"
 
--- Bird class
+-- Loads the created classes
 require "Bird"
-
--- Pipe class
 require "Pipe"
+require "PipePair"
 
 -- Physical screen dimensions
 WINDOW_WIDTH = 1280
@@ -28,6 +27,9 @@ WINDOW_HEIGHT = 720
 -- Virtual screen dimensions
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
+
+-- Gap height between pipes
+GAP_HEIGHT = 90
 
 -- Gets the current hour, to update the sprites
 CURRENT_HOUR = tonumber(os.date("%H"))
@@ -52,10 +54,13 @@ math.randomseed(os.time())
 
 -- Bird sprite and pipes sprite list
 local bird = Bird()
-local pipes = {}
+local pipePairs = {}
 
 -- Keeps track of the elapsed time since last pipe spawn
 local spawnTimer = 0
+
+-- Last recorded y value
+local lastY = -PIPE_HEIGHT + math.random(80) + 20
 
 -- Runs when the game starts, only once
 function love.load()
@@ -111,7 +116,14 @@ function love.update(dt)
     spawnTimer = spawnTimer + dt
 
     if spawnTimer > 2 then
-        table.insert(pipes, Pipe())
+        -- Modify y so the pipes aren't too far apart
+        -- Pipe spawns no higher than 10 pixels below top edge of screen
+        -- And no lower than the gap length
+        local y = math.max(-PIPE_HEIGHT + 10,
+            math.min(lastY + math.random(-20, 20), VIRTUAL_HEIGHT - GAP_HEIGHT - PIPE_HEIGHT))
+        lastY = y
+
+        table.insert(pipePairs, PipePair(y))
         spawnTimer = 0
     end
 
@@ -119,11 +131,16 @@ function love.update(dt)
     bird:update(dt)
 
     -- Moves pipes through the screen 
-    for k, pipe in pairs(pipes) do
-        pipe:update(dt)
+    for k, pair in pairs(pipePairs) do
+        pair:update(dt)
+    end
 
-        if pipe.x < -pipe.width then
-            table.remove(pipes, k)
+    -- Remove the flaggd pipes
+    -- Since the removal of a table element shifts all the other elements
+    -- This is done on a separate for so it doesn't interfere on other iterations
+    for k, pair in pairs(pipePairs) do
+        if pair.remove then
+            table.remove(pipePairs, k)
         end
     end
 
@@ -139,8 +156,8 @@ function love.draw()
     love.graphics.draw(background, -backgroundScroll, 0)
 
     -- Rendering all the pipes
-    for k, pipe in pairs(pipes) do
-        pipe:render()
+    for k, pair in pairs(pipePairs) do
+        pair:render()
     end
 
     -- Rendering ground after the pipes, so the pipes appear to be sticking out of it

@@ -39,6 +39,24 @@ function PlayState:init()
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
 end
 
+function PlayState:enter(bird)
+    -- If we're coming from death, restart scrolling
+    scrolling = true
+
+    -- Sets bird to the bird passed by title screen, so its the same color
+    -- Starts its movement
+    birdMovement = true
+    self.bird = bird
+end
+
+function PlayState:exit()
+    -- Stop scrolling for the death/score screen
+    scrolling = false
+    
+    -- Stop bird movement
+    birdMovement = false
+end
+
 function PlayState:update(dt)
     if scrolling == true then
         -- Spawn a pipe every spawnLimit seconds on the edge of screen
@@ -96,20 +114,4 @@ function PlayState:render()
     end
 
     self.bird:render()
-end
-
-function PlayState:enter()
-    -- If we're coming from death, restart scrolling
-    scrolling = true
-
-    -- Start bird movement
-    birdMovement = true
-end
-
-function PlayState:exit()
-    -- Stop scrolling for the death/score screen
-    scrolling = false
-    
-    -- Stop bird movement
-    birdMovement = false
 end

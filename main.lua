@@ -50,13 +50,13 @@ local GROUND_SCROLL_SPEED = 60
 -- Defines a looping point based on repetition of the texture chosen
 local BACKGROUND_LOOPING_POINT = 514
 
--- Seed the random number generator function
-math.randomseed(os.time())
-
 -- Runs when the game starts, only once
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.window.setTitle("Frappy Bird")
+
+    -- Seed the random number generator function
+    math.randomseed(os.time())
 
     -- Loads the fonts used in the game
     smallFont = love.graphics.newFont("fonts/font.ttf", 8)

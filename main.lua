@@ -15,6 +15,8 @@ push = require "push"
 -- https://github.com/vrld/hump/blob/master/class.lua
 Class = require "class"
 
+require "Bird"
+
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
@@ -34,6 +36,7 @@ local GROUND_SCROLL_SPEED = 60
 -- local BACKGROUND_LOOPING_POINT = 413
 local BACKGROUND_LOOPING_POINT = 514
 
+local bird = Bird()
 
 -- Runs when the game starts, only once.
 function love.load()
@@ -80,6 +83,8 @@ function love.draw()
 
     love.graphics.draw(background, -backgroundScroll, 0)
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
+
+    bird:render()
 
     push:finish()
 end

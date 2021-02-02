@@ -12,5 +12,5 @@ Implementation of mobile game ["Flappy Bird"](https://pt.wikipedia.org/wiki/Flap
 
 ## Possible updates
 
-1. High-score feature.
-2. The bird is moved by input detected from the mouse.
+1. The bird is moved by input detected from the mouse.
+2. High-score feature. 

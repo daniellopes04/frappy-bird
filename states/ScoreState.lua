@@ -12,6 +12,13 @@
 -- Inherits BaseState methods
 ScoreState = Class{__includes = BaseState}
 
+function ScoreState:init()
+    -- Medal sprite
+    self.image = love.graphics.newImage("sprites/bronze.png")
+    self.width = self.image:getWidth()
+    self.height = self.image:getHeight()
+end
+
 function ScoreState:enter(params)
     self.score = params.score
 end
@@ -36,6 +43,18 @@ function ScoreState:render()
     love.graphics.printf("Score: ".. tostring(self.score), 0, 100, VIRTUAL_WIDTH, "center")
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf("Score: ".. tostring(self.score), -2, 98, VIRTUAL_WIDTH, "center")
+
+    -- A medal is set to the player if a certain score is reached
+    if self.score >= 10 then
+        self.image = love.graphics.newImage("sprites/silver.png")
+    elseif self.score >= 20 then
+        self.image = love.graphics.newImage("sprites/gold.png")
+    elseif self.score >= 30 then
+        self.image = love.graphics.newImage("sprites/platinum.png")
+    end
+
+    -- Draws the medal
+    love.graphics.draw(self.image, VIRTUAL_WIDTH / 2 - self.width / 2, 105 + self.height / 2)
 
     love.graphics.setColor(0, 0, 0)
     love.graphics.printf("Press enter to play again!", 0, 160, VIRTUAL_WIDTH, "center")

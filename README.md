@@ -5,11 +5,11 @@ Implementation of mobile game ["Flappy Bird"](https://pt.wikipedia.org/wiki/Flap
 
 ## Objectives
 
-1. Implement a version from the game Flappy Bird, where the bird is moved by input detected from the keyboard.
-2. Influence the generation of pipes so as to bring about more complicated level generation.
-3. Give the player a medal for their performance, along with their score.
+1. ~Implement a version from the game Flappy Bird, where the bird is moved by input detected from the keyboard.~
+2. ~Influence the generation of pipes so as to bring about more complicated level generation.~
+3. ~Give the player a medal for their performance, along with their score.~
 4. Implement a pause feature, just in case life gets in the way of jumping through pipes!
 
 ## Possible updates
 
-1. 
+1. High-score feature.

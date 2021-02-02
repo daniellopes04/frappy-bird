@@ -18,6 +18,15 @@ COUNTDOWN_TIME = 0.75
 function CountdownState:init()
     self.count = 3
     self.timer = 0
+
+    self.bird = Bird()
+end
+
+function CountdownState:enter(params)
+    -- Receives bird passed by last state
+    if params then
+        self.bird = params.bird
+    end
 end
 
 function CountdownState:update(dt)
@@ -28,15 +37,21 @@ function CountdownState:update(dt)
         self.count = self.count - 1
 
         if self.count == 0 then
-            gStateMachine:change("play")
+            gStateMachine:change("play", {
+                bird = self.bird
+            })
         end
     end
+
+    self.bird:update(dt)
 end
 
 function CountdownState:render()
     love.graphics.setFont(hugeFont)
     love.graphics.setColor(0, 0, 0)
-    love.graphics.printf(tostring(self.count), 0, 120, VIRTUAL_WIDTH, "center")
+    love.graphics.printf(tostring(self.count), 0, 60, VIRTUAL_WIDTH, "center")
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(tostring(self.count), -2, 118, VIRTUAL_WIDTH, "center")
+    love.graphics.printf(tostring(self.count), -2, 58, VIRTUAL_WIDTH, "center")
+
+    self.bird:render()
 end

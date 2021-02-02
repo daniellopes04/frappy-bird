@@ -43,6 +43,10 @@ function PlayState:init()
 end
 
 function PlayState:enter(params)
+    -- Receives bird passed by last state
+    if params then
+        self.bird = params.bird
+    end
     -- Starts bird movement
     birdMovement = true
 end

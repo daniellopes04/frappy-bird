@@ -25,6 +25,9 @@ function PipePair:init(y)
     -- If the pair is past the left edge of the screen, it can be removed
     self.remove = false
 
+    -- Whether or not this pair of pipes has been scored
+    self.scored = false
+
     -- Generates a new random value for the next pair
     GAP_HEIGHT = math.random(80, 120)
 end

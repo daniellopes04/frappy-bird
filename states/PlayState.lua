@@ -35,76 +35,89 @@ function PlayState:init()
     self.spawnTimer = 0
     self.spawnLimit = math.random(1, 2) + math.random() + 0.5
 
+    -- Score during the play state
+    self.score = 0
+
     -- Last recorded y value
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
 end
 
-function PlayState:enter(bird)
-    -- If we're coming from death, restart scrolling
-    scrolling = true
-
+function PlayState:enter(params)
     -- Sets bird to the bird passed by title screen, so its the same color
     -- Starts its movement
+    if params then
+        self.bird = params.bird
+    end
     birdMovement = true
-    self.bird = bird
 end
 
-function PlayState:exit()
-    -- Stop scrolling for the death/score screen
-    scrolling = false
-    
+function PlayState:exit()    
     -- Stop bird movement
     birdMovement = false
 end
 
 function PlayState:update(dt)
-    if scrolling == true then
-        -- Spawn a pipe every spawnLimit seconds on the edge of screen
-        self.spawnTimer = self.spawnTimer + dt
+    -- Spawn a pipe every spawnLimit seconds on the edge of screen
+    self.spawnTimer = self.spawnTimer + dt
 
-        if self.spawnTimer > self.spawnLimit then
-            -- Modify y so the pipes aren't too far apart
-            -- Pipe spawns no higher than 10 pixels below top edge of screen
-            -- And no lower than the gap length
-            local y = math.max(-PIPE_HEIGHT + 10,
-                math.min(self.lastY + math.random(-40, 40), VIRTUAL_HEIGHT - GAP_HEIGHT - PIPE_HEIGHT - 26))
-            self.lastY = y
+    if self.spawnTimer > self.spawnLimit then
+        -- Modify y so the pipes aren't too far apart
+        -- Pipe spawns no higher than 10 pixels below top edge of screen
+        -- And no lower than the gap length
+        local y = math.max(-PIPE_HEIGHT + 10,
+            math.min(self.lastY + math.random(-40, 40), VIRTUAL_HEIGHT - GAP_HEIGHT - PIPE_HEIGHT - 26))
+        self.lastY = y
 
-            table.insert(self.pipePairs, PipePair(y))
-            self.spawnTimer = 0
-            self.spawnLimit = math.random(1, 2) + math.random() + 0.5
-        end
+        -- Spawns a pipe pair
+        table.insert(self.pipePairs, PipePair(y))
 
-        -- Moves pipes through the screen 
-        for k, pair in pairs(self.pipePairs) do
-            pair:update(dt)
-        end
+        -- Reset timer and define a new limit
+        self.spawnTimer = 0
+        self.spawnLimit = math.random(1, 2) + math.random() + 0.5
+    end
 
-        -- Remove the flaggd pipes
-        -- Since the removal of a table element shifts all the other elements
-        -- This is done on a separate for so it doesn't interfere on other iterations
-        for k, pair in pairs(self.pipePairs) do
-            if pair.remove then
-                table.remove(self.pipePairs, k)
+    -- Moves pipes through the screen 
+    for k, pair in pairs(self.pipePairs) do
+        -- Scores a point if the pipes have gone past the bird all the way
+        -- Only scores if pipe hasn't been scored yet
+        if not pair.scored then
+            if pair.x + PIPE_WIDTH < self.bird.x then
+                self.score = self.score + 1
+                pair.scored = true
             end
         end
 
-        -- Moves the bird and flaps its wings
-        self.bird:update(dt)
+        pair:update(dt)
+    end
 
-        -- Simple collision detection between bird and pipe pairs
-        for k, pair in pairs(self.pipePairs) do
-            for l, pipe in pairs(pair.pipes) do
-                if self.bird:collides(pipe) then
-                    gStateMachine:change("title")
-                end
+    -- Remove the flaggd pipes
+    -- Since the removal of a table element shifts all the other elements
+    -- This is done on a separate for so it doesn't interfere on other iterations
+    for k, pair in pairs(self.pipePairs) do
+        if pair.remove then
+            table.remove(self.pipePairs, k)
+        end
+    end
+
+    -- Moves the bird and flaps its wings
+    self.bird:update(dt)
+
+    -- Simple collision detection between bird and pipe pairs
+    for k, pair in pairs(self.pipePairs) do
+        for l, pipe in pairs(pair.pipes) do
+            if self.bird:collides(pipe) then
+                gStateMachine:change("score", {
+                    score = self.score
+                })
             end
         end
+    end
 
-        -- Reset if we get to the ground or pass the top edge of screen
-        if self.bird.y > VIRTUAL_HEIGHT - 15 or self.bird.y < 0 - 15 then
-            gStateMachine:change("title")
-        end
+    -- Reset if we get to the ground or pass the top edge of screen
+    if self.bird.y > VIRTUAL_HEIGHT - 15 or self.bird.y < 0 - 15 then 
+        gStateMachine:change("score", {
+            score = self.score
+        })
     end
 end
 
@@ -112,6 +125,14 @@ function PlayState:render()
     for k, pair in pairs(self.pipePairs) do
         pair:render()
     end
+
+    -- Prints the font two times, once in black, then again in white with a little offset
+    -- This gives the effect of a black shadow to the text
+    love.graphics.setFont(flappyFont)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.printf(tostring(self.score), 0, 30, VIRTUAL_WIDTH, "center")
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(tostring(self.score), -2, 28, VIRTUAL_WIDTH, "center")
 
     self.bird:render()
 end

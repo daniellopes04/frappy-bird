@@ -12,20 +12,10 @@
 -- Inherits BaseState methods
 TitleScreenState = Class{__includes = BaseState}
 
-function TitleScreenState:init()
-    -- Bird sprite
-    self.bird = Bird()
-end
-
 function TitleScreenState:update(dt)
     if love.keyboard.wasPressed("enter") or love.keyboard.wasPressed("return") then
-        gStateMachine:change("play", {
-            bird = self.bird
-        })
+        gStateMachine:change("countdown")
     end
-
-    -- Moves the bird and flaps its wings
-    self.bird:update(dt)
 end
 
 function TitleScreenState:render()
@@ -42,6 +32,4 @@ function TitleScreenState:render()
     love.graphics.printf("Press Enter", 0, 100, VIRTUAL_WIDTH, "center")
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf("Press Enter", -2, 98, VIRTUAL_WIDTH, "center")
-
-    self.bird:render()
 end     

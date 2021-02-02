@@ -24,6 +24,7 @@ require "states/BaseState"
 require "states/PlayState"
 require "states/TitleScreenState"
 require "states/ScoreState"
+require "states/CountdownState"
 
 -- Physical screen dimensions
 WINDOW_WIDTH = 1280
@@ -91,6 +92,9 @@ function love.load()
         end,
         ["score"] = function() 
             return ScoreState() 
+        end,
+        ["countdown"] = function()
+            return CountdownState()
         end
     }
     gStateMachine:change("title")

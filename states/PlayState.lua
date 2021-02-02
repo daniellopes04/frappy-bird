@@ -25,7 +25,7 @@ BIRD_WIDTH = 34
 BIRD_HEIGHT = 24
 
 function PlayState:init()
-    -- Bird sprite
+    --  Bird sprite
     self.bird = Bird()
 
     -- Pipes sprite list
@@ -43,16 +43,12 @@ function PlayState:init()
 end
 
 function PlayState:enter(params)
-    -- Sets bird to the bird passed by title screen, so its the same color
-    -- Starts its movement
-    if params then
-        self.bird = params.bird
-    end
+    -- Starts bird movement
     birdMovement = true
 end
 
 function PlayState:exit()    
-    -- Stop bird movement
+    -- Stops bird movement
     birdMovement = false
 end
 

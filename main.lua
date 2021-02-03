@@ -52,6 +52,9 @@ local GROUND_SCROLL_SPEED = 60
 -- Defines a looping point based on repetition of the texture chosen
 local BACKGROUND_LOOPING_POINT = 514
 
+-- Defines if the game is paused
+local pause = false
+
 -- Runs when the game starts, only once
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -128,6 +131,10 @@ function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
     end
+
+    if key == "p" then
+        pause = not pause
+    end
 end
 
 -- Mouse entry handler, called each frame
@@ -147,11 +154,13 @@ end
 
 --Called each frame, updates the game state components
 function love.update(dt)
-    -- Scrolling the background and ground sprites
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+    if not pause then
+        -- Scrolling the background and ground sprites
+        backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
 
-    gStateMachine:update(dt)
+        gStateMachine:update(dt)
+    end
 
     -- Resets input table, so it stores only the keys and buttons pressed at one frame
     love.keyboard.keysPressed = {}
@@ -166,6 +175,15 @@ function love.draw()
     love.graphics.draw(background, -backgroundScroll, 0)
     gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
+
+    -- Visual pause response
+    if pause then
+        love.graphics.setFont(flappyFont)
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.print("||", 8, 8)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print("||", 6, 6)
+    end
 
     push:finish()
 end

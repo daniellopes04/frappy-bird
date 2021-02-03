@@ -12,6 +12,9 @@
 -- Inherits BaseState methods
 ScoreState = Class{__includes = BaseState}
 
+-- Receives the high-score stored in the 'data.sav' file 
+local highScore = 0
+
 function ScoreState:init()
     -- Medal sprite
     self.image = love.graphics.newImage("sprites/bronze.png")
@@ -21,6 +24,16 @@ end
 
 function ScoreState:enter(params)
     self.score = params.score
+
+    if not love.filesystem.getInfo("data.sav") then
+        love.filesystem.write("data.sav", self.score)
+    else
+        -- Saves new high-score to 'data.sav' file
+        if self.score > highScore then
+            highScore = self.score
+            love.filesystem.write("data.sav", highScore)
+        end
+    end
 end
 
 function ScoreState:update(dt)
@@ -56,8 +69,14 @@ function ScoreState:render()
     -- Draws the medal
     love.graphics.draw(self.image, VIRTUAL_WIDTH / 2 - self.width / 2, 105 + self.height / 2)
 
+    love.graphics.setFont(mediumFont)
     love.graphics.setColor(0, 0, 0)
-    love.graphics.printf("Press enter to play again!", 0, 160, VIRTUAL_WIDTH, "center")
+    love.graphics.printf("High Score: ".. tostring(highScore), 0, 160, VIRTUAL_WIDTH, "center")
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf("Press enter to play again!", -2, 158, VIRTUAL_WIDTH, "center")
-end     
+    love.graphics.printf("High Score: ".. tostring(highScore), -2, 158, VIRTUAL_WIDTH, "center")
+
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.printf("Press enter to play again!", 0, 180, VIRTUAL_WIDTH, "center")
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf("Press enter to play again!", -2, 178, VIRTUAL_WIDTH, "center")
+end

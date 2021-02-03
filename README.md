@@ -25,7 +25,7 @@ Implementation of mobile game ["Flappy Bird"](https://pt.wikipedia.org/wiki/Flap
 First, you have to install [LÖVE2D](https://love2d.org/), then run the following.
 
 ```bash
-    git clone https://github.com/daniellopes04/frappy-bird
+git clone https://github.com/daniellopes04/frappy-bird
 ```
 ```bash
 cd frappy-bird

@@ -14,7 +14,7 @@ local PIPE_IMAGE = love.graphics.newImage("sprites/pipe-green.png")
 
 function Pipe:init(orientation, y)
     -- Define the pipe color randomly
-    num = math.random(1, 2)
+    local num = math.random(1, 2)
     if num == 2 then
         PIPE_IMAGE = love.graphics.newImage("sprites/pipe-red.png")
     end

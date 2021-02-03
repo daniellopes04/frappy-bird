@@ -84,7 +84,7 @@ function PlayState:update(dt)
             if pair.x + PIPE_WIDTH < self.bird.x then
                 self.score = self.score + 1
                 pair.scored = true
-                sounds["score"]:play()
+                sounds["point"]:play()
             end
         end
 
@@ -107,8 +107,8 @@ function PlayState:update(dt)
     for k, pair in pairs(self.pipePairs) do
         for l, pipe in pairs(pair.pipes) do
             if self.bird:collides(pipe) then
-                sounds["explosion"]:play()
-                sounds["hurt"]:play()
+                sounds["hit"]:play()
+                sounds["die"]:play()
 
                 gStateMachine:change("score", {
                     score = self.score
@@ -119,8 +119,8 @@ function PlayState:update(dt)
 
     -- Reset if we get to the ground or pass the top edge of screen
     if self.bird.y > VIRTUAL_HEIGHT - 15 or self.bird.y < 0 - 15 then 
-        sounds["explosion"]:play()
-        sounds["hurt"]:play()
+        sounds["swoosh"]:play()
+        sounds["die"]:play()
 
         gStateMachine:change("score", {
             score = self.score

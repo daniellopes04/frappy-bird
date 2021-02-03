@@ -69,18 +69,12 @@ function love.load()
 
     -- Table of sounds of the game
     sounds = {
-        ["jump"] = love.audio.newSource("sounds/jump.wav", "static"),
-        ["explosion"] = love.audio.newSource("sounds/explosion.wav", "static"),
-        ["hurt"] = love.audio.newSource("sounds/hurt.wav", "static"),
-        ["score"] = love.audio.newSource("sounds/score.wav", "static"),
-
-        -- https://freesound.org/people/xsgianni/sounds/388079/
-        ["music"] = love.audio.newSource("sounds/marios_way.mp3", "static")
+        ["hit"] = love.audio.newSource("sounds/hit.wav", "static"),
+        ["die"] = love.audio.newSource("sounds/die.wav", "static"),
+        ["swoosh"] = love.audio.newSource("sounds/swoosh.wav", "static"),
+        ["wing"] = love.audio.newSource("sounds/wing.wav", "static"),
+        ["point"] = love.audio.newSource("sounds/point.wav", "static")
     }
-
-    -- Starts background music
-    sounds["music"]:setLooping(true)
-    sounds["music"]:play()
 
     -- Changes the background and ground sprites based on hour of day
     if CURRENT_HOUR >= 18 or (CURRENT_HOUR >= 0 and CURRENT_HOUR <= 6) then

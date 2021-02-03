@@ -8,9 +8,10 @@ Implementation of mobile game ["Flappy Bird"](https://pt.wikipedia.org/wiki/Flap
 1. ~Implement a version from the game Flappy Bird, where the bird is moved by input detected from the keyboard.~
 2. ~Influence the generation of pipes so as to bring about more complicated level generation.~
 3. ~Give the player a medal for their performance, along with their score.~
-4. Implement a pause feature, just in case life gets in the way of jumping through pipes!
+4. ~Implement a pause feature, just in case life gets in the way of jumping through pipes!~
 
 ## Possible updates
 
-1. The bird is moved by input detected from the mouse.
-2. High-score feature. 
+1. ~The bird is moved by input detected from the mouse.~
+2. ~Pause feature.~
+3. ~High-score feature.~ 

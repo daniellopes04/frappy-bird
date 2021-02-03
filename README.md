@@ -40,17 +40,17 @@ Simply go to ["Resources"](https://github.com/daniellopes04/frappy-bird/tree/mai
 
 ## The game
 
-**Controls**
+### Controls
 
 * Space bar or mouse click - Bird fly
 * "P" - Pause
 * "ESC" - Quit
 * "Enter" - Start
 
-**High-score feature**
+### High-score feature
 
 ![Screen4](https://github.com/daniellopes04/frappy-bird/blob/main/resources/images/print4.png)
 
-**Day/Night cycle** 
+### Day/Night cycle 
 
 ![Screen3](https://github.com/daniellopes04/frappy-bird/blob/main/resources/images/print3.png)

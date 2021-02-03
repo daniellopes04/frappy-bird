@@ -28,6 +28,15 @@ function PlayState:init()
     --  Bird sprite
     self.bird = Bird()
 
+    -- Define the pipe color randomly
+    local aux = love.math.random(2)
+
+    if aux == 1 then
+        PIPE_IMAGE = love.graphics.newImage("sprites/pipe-green.png")
+    else
+        PIPE_IMAGE = love.graphics.newImage("sprites/pipe-red.png")
+    end
+
     -- Pipes sprite list
     self.pipePairs = {}
 

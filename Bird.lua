@@ -20,7 +20,7 @@ local birdTimer = 0
 
 function Bird:init()
     -- Bird color is defined randomly
-    local num = math.random(1, 3)
+    local num = love.math.random(3)
 
     if num == 1 then
         self.color = "yellow"

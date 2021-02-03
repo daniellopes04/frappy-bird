@@ -25,14 +25,14 @@ Implementation of mobile game ["Flappy Bird"](https://pt.wikipedia.org/wiki/Flap
 First, you have to install [LÖVE2D](https://love2d.org/), then run the following.
 
 ```bash
-    git clone https://github.com/daniellopes04/pong
-    cd pong
+    git clone https://github.com/daniellopes04/frappy-bird
+    cd frappy-bird
     love .
 ```
 
 ### Run
 
-Simply go to ["Resources"](https://github.com/daniellopes04/pong/tree/main/resources) folder and download the version compatible with your system.
+Simply go to ["Resources"](https://github.com/daniellopes04/frappy-bird/tree/main/resources) folder and download the version compatible with your system.
 
 ## Features
 
@@ -43,11 +43,10 @@ Simply go to ["Resources"](https://github.com/daniellopes04/pong/tree/main/resou
 * "ESC" - Quit
 * "Enter" - Start
 
-### 2. Day/Night cycle 
+### 2. High-score
 
 ![Screenshot 2](resources/images/print2.png)
+
+### 3. Day/Night cycle 
+
 ![Screenshot 3](resources/images/print3.png)
-
-### 3. High-score
-
-![Screenshot 4](resources/images/print4.png)

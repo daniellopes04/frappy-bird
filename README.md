@@ -3,6 +3,8 @@
     
 Implementation of mobile game ["Flappy Bird"](https://pt.wikipedia.org/wiki/Flappy_Bird).
 
+![Screen1](resources/images/print1.png)
+
 ## Objectives
 
 - [x] Implement a version from the game Flappy Bird, where the bird is moved by input detected from the keyboard.
@@ -43,5 +45,8 @@ Simply go to ["Resources"](https://github.com/daniellopes04/frappy-bird/tree/mai
 
 ### 2. High-score
 
+![Screen4](resources/images/print4.png)
+
 ### 3. Day/Night cycle 
 
+![Screen3](resources/images/print3.png)

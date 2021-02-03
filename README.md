@@ -3,7 +3,7 @@
     
 Implementation of mobile game ["Flappy Bird"](https://pt.wikipedia.org/wiki/Flappy_Bird).
 
-![Screen1](resources/images/print1.png)
+![Screen1](https://github.com/daniellopes04/frappy-bird/blob/main/resources/images/print1.png)
 
 ## Objectives
 
@@ -26,27 +26,31 @@ First, you have to install [LÖVE2D](https://love2d.org/), then run the followin
 
 ```bash
     git clone https://github.com/daniellopes04/frappy-bird
-    cd frappy-bird
-    love .
+```
+```bash
+cd frappy-bird
+```
+```bash
+love .
 ```
 
 ### Run
 
 Simply go to ["Resources"](https://github.com/daniellopes04/frappy-bird/tree/main/resources) folder and download the version compatible with your system.
 
-## Features
+## The game
 
-### 1. Controls
+**Controls**
 
 * Space bar or mouse click - Bird fly
 * "P" - Pause
 * "ESC" - Quit
 * "Enter" - Start
 
-### 2. High-score
+**High-score feature**
 
-![Screen4](resources/images/print4.png)
+![Screen4](https://github.com/daniellopes04/frappy-bird/blob/main/resources/images/print4.png)
 
-### 3. Day/Night cycle 
+**Day/Night cycle** 
 
-![Screen3](resources/images/print3.png)
+![Screen3](https://github.com/daniellopes04/frappy-bird/blob/main/resources/images/print3.png)

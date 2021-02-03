@@ -81,7 +81,7 @@ function Bird:update(dt)
         self.y = self.y + self.dy
 
         -- The bird jumps on screen when "space" gets pressed
-        if love.keyboard.wasPressed("space") then
+        if love.keyboard.wasPressed("space") or love.mouse.wasPressed(1) then
             self.dy = ANTI_GRAVITY
             sounds["wing"]:play()
         end

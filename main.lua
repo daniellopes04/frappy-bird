@@ -110,6 +110,9 @@ function love.load()
 
     -- Keeps track of the keys pressed by the user
     love.keyboard.keysPressed = {}
+
+    -- Keeps track of the mouse clicks of the user
+    love.mouse.buttonsPressed = {}
 end
 
 -- Called by love2d whenever we resize the screen
@@ -127,9 +130,19 @@ function love.keypressed(key)
     end
 end
 
+-- Mouse entry handler, called each frame
+function love.mousepressed(x, y, button)
+    love.mouse.buttonsPressed[button] = true
+end
+
 -- Used to check if a key was pressed in the last frame
 function love.keyboard.wasPressed(key)
     return love.keyboard.keysPressed[key]
+end
+
+-- Used to check if a mouse button was pressed in the last frame
+function love.mouse.wasPressed(button)
+    return love.mouse.buttonsPressed[button]
 end
 
 --Called each frame, updates the game state components
@@ -140,8 +153,9 @@ function love.update(dt)
 
     gStateMachine:update(dt)
 
-    -- Resets input table, so it stores only the keys pressed at one frame
+    -- Resets input table, so it stores only the keys and buttons pressed at one frame
     love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 -- Called each frame for drawing to the screen after the update or otherwise

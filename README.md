@@ -1,9 +1,9 @@
-# ![Frappy Bird](resources/images/frappy.png)
+# ![Frappy Bird](images/frappy.png)
 ***Lecture 1* on "S50's Intro to Game Development" course, available on [YouTube](https://www.youtube.com/playlist?list=PLWKjhJtqVAbluXJKKbCIb4xd7fcRkpzoz)**
     
 Implementation of mobile game ["Flappy Bird"](https://pt.wikipedia.org/wiki/Flappy_Bird).
 
-![Screen1](https://github.com/daniellopes04/frappy-bird/blob/main/resources/images/print1.png)
+![Screen1](https://github.com/daniellopes04/frappy-bird/blob/main/images/print1.png)
 
 ## Objectives
 
@@ -49,8 +49,8 @@ Simply go to ["Releases"](https://github.com/daniellopes04/frappy-bird/releases)
 
 ### High-score feature
 
-![Screen4](https://github.com/daniellopes04/frappy-bird/blob/main/resources/images/print4.png)
+![Screen4](https://github.com/daniellopes04/frappy-bird/blob/main/images/print4.png)
 
 ### Day/Night cycle 
 
-![Screen3](https://github.com/daniellopes04/frappy-bird/blob/main/resources/images/print3.png)
+![Screen3](https://github.com/daniellopes04/frappy-bird/blob/main/images/print3.png)

@@ -34,9 +34,9 @@ cd frappy-bird
 love .
 ```
 
-### Run
+### Play
 
-Simply go to ["Resources"](https://github.com/daniellopes04/frappy-bird/tree/main/resources) folder and download the version compatible with your system.
+Simply go to ["Releases"](https://github.com/daniellopes04/frappy-bird/releases) and download the version compatible with your system.
 
 ## The game
 

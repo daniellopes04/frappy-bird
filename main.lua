@@ -38,7 +38,7 @@ VIRTUAL_HEIGHT = 288
 CURRENT_HOUR = tonumber(os.date("%H"))
 
 -- Loads background sprite and sets its scroll value
-local background = love.graphics.newImage("sprites/background-sunset.png")
+local background = love.graphics.newImage("sprites/background-day.png")
 local backgroundScroll = 0
 
 -- Loads foreground sprite and sets its scroll value
@@ -80,12 +80,12 @@ function love.load()
     }
 
     -- Changes the background and ground sprites based on hour of day
-    --[[ if CURRENT_HOUR >= 18 or (CURRENT_HOUR >= 0 and CURRENT_HOUR <= 6) then
+    if CURRENT_HOUR >= 18 or (CURRENT_HOUR >= 0 and CURRENT_HOUR <= 6) then
         background = love.graphics.newImage("sprites/background-night.png")
         ground = love.graphics.newImage("sprites/ground-night.png")
     elseif CURRENT_HOUR == 17 or CURRENT_HOUR == 18 then
         background = love.graphics.newImage("sprites/background-sunset.png")
-    end ]]
+    end
 
     -- Setting up the screen
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {

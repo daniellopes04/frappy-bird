@@ -1,4 +1,4 @@
-# ![Frappy Bird](images/frappy.png)
+# ![Frappy Bird](images/frappy1.png)
 ***Lecture 1* on "S50's Intro to Game Development" course, available on [YouTube](https://www.youtube.com/playlist?list=PLWKjhJtqVAbluXJKKbCIb4xd7fcRkpzoz)**
     
 Implementation of mobile game ["Flappy Bird"](https://en.wikipedia.org/wiki/Flappy_Bird).
